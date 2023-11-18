@@ -91,6 +91,35 @@ def deleteCliente(cliente_id):
         connection.close()
 
 
+def deletePlanoSeguro(plano_seguro_id):
+    connection = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='',
+        database="corretorabd"
+    )
+    cursor = connection.cursor()
+
+    try:
+        delete_queries = [
+            "DELETE FROM Realiza_Ativacoes_Cliente_Plano_Seguro WHERE fk_PlanoSeguro_id = %s",
+            "DELETE FROM vende_corretor_seguros_cliente_plano_de_seguro WHERE fk_PlanoSeguro_id = %s"
+        ]
+        
+        for query in delete_queries:
+            cursor.execute(query, (plano_seguro_id,))
+
+        delete_query_ps = "DELETE FROM PlanoSeguro WHERE ID = %s"
+        cursor.execute(delete_query_ps, (plano_seguro_id,))
+
+        connection.commit()
+    except mysql.connector.Error as err:
+        print(f"Erro ao deletar plano de seguro: {err}")
+        connection.rollback()
+    finally:
+        cursor.close()
+        connection.close()
+
 class Requisicoes(BaseHTTPRequestHandler):
 
     def _set_headers(self, status_code=200):
@@ -190,13 +219,32 @@ class Requisicoes(BaseHTTPRequestHandler):
 
     def do_DELETE(self):
         cliente_match = re.match(r"/cliente/(\d+)", self.path)
+        plano_seguro_match = re.match(r"/planoSeguro/(\d+)", self.path)
+
         if cliente_match:
             cliente_id = int(cliente_match.group(1))
-            deleteCliente(cliente_id)
-            self._set_headers()
-            self.wfile.write(json.dumps({'status': 'sucesso'}).encode())
+            try:
+                deleteCliente(cliente_id)
+                self._set_headers()
+                self.wfile.write(json.dumps({'status': 'sucesso'}).encode())
+            except Exception as e:
+                print(f"Erro ao deletar cliente: {e}")
+                self.send_error(500, f"Erro interno: {e}")
+
+        elif plano_seguro_match:
+            plano_seguro_id = int(plano_seguro_match.group(1))
+            try:
+                deletePlanoSeguro(plano_seguro_id)
+                self._set_headers()
+                self.wfile.write(json.dumps({'status': 'sucesso'}).encode())
+            except Exception as e:
+                print(f"Erro ao deletar plano de seguro: {e}")
+                self.send_error(500, f"Erro interno: {e}")
+
         else:
             self._set_headers(404)
+            self.wfile.write(json.dumps({'status': 'falha', 'erro': 'Rota não encontrada'}).encode())
+
 
 def run(server_class=HTTPServer, port=8080):
     server_address = ('', port)

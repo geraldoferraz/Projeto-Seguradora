@@ -257,3 +257,28 @@ function deleteCliente() {
         });
     }
 }
+
+function deletePlanoSeguro() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const planoSeguroId = urlParams.get('id');
+
+    if (planoSeguroId && confirm('Tem certeza que deseja deletar este plano de seguro?')) {
+        fetch(`http://localhost:8080/planoSeguro/${planoSeguroId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Falha ao deletar plano de seguro');
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Plano de seguro deletado com sucesso.');
+            window.location.href = "http://127.0.0.1:5500/BaseClientes.html";
+        })
+        .catch(error => {
+            console.error('Erro ao deletar plano de seguro:', error);
+            alert('Erro ao deletar plano de seguro.');
+        });
+    }
+}
