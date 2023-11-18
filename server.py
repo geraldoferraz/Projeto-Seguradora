@@ -58,16 +58,47 @@ def getPlanoSeguroPorClienteId(cliente_id):
     return plano
 
 
+def deleteCliente(cliente_id):
+    connection = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='',
+        database="corretorabd"
+    )
+    cursor = connection.cursor()
+
+    try:
+        delete_queries = [
+            "DELETE FROM PessoaFisica WHERE fk_cliente_id = %s",
+            "DELETE FROM PessoaJuridica WHERE fk_cliente_id = %s",
+            "DELETE FROM Realiza_Ativacoes_Cliente_Plano_Seguro WHERE fk_cliente_id = %s",  
+            "DELETE FROM vende_corretor_seguros_cliente_plano_de_seguro WHERE fk_cliente_id = %s"
+        ]
+        
+        for query in delete_queries:
+            cursor.execute(query, (cliente_id,))
+
+        cursor.execute("DELETE FROM PlanoSeguro WHERE fk_cliente_id = %s", (cliente_id,))
+
+        cursor.execute("DELETE FROM Cliente WHERE id = %s", (cliente_id,))
+
+        connection.commit()
+    except mysql.connector.Error as err:
+        print(f"Erro ao deletar cliente: {err}")
+        connection.rollback()
+    finally:
+        cursor.close()
+        connection.close()
+
+
 class Requisicoes(BaseHTTPRequestHandler):
 
-    def _set_headers(self, status_code):
-        if not status_code:
-            status_code = 200
+    def _set_headers(self, status_code=200):
         self.send_response(status_code)
         self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Content-type', 'application/json') 
+        self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS')
         self.end_headers()
 
     def do_OPTIONS(self): 
@@ -156,6 +187,17 @@ class Requisicoes(BaseHTTPRequestHandler):
             self._set_headers(200)
             self.wfile.write(json.dumps({'status': 'sucesso'}).encode())
 
+
+    def do_DELETE(self):
+        cliente_match = re.match(r"/cliente/(\d+)", self.path)
+        if cliente_match:
+            cliente_id = int(cliente_match.group(1))
+            deleteCliente(cliente_id)
+            self._set_headers()
+            self.wfile.write(json.dumps({'status': 'sucesso'}).encode())
+        else:
+            self._set_headers(404)
+
 def run(server_class=HTTPServer, port=8080):
     server_address = ('', port)
     httpd = socketserver.TCPServer(("", port), Requisicoes)
@@ -165,13 +207,15 @@ def run(server_class=HTTPServer, port=8080):
 if __name__ == "__main__":
     run()
 
+       
+
+
+ 
 
 
 
-
-
-
-
+ 
+ 
 
 
 

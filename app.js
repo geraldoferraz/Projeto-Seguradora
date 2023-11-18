@@ -4,6 +4,8 @@ const abrirHomeLink3 = document.querySelector('.homeLink3');
 const search = document.querySelector('.form-control');
 const ul = document.querySelector('.clientes-container');
 
+
+
 abrirHomeLink.addEventListener('click', trocarPag);
 abrirHomeLink2.addEventListener('click', trocarPag2);
 abrirHomeLink3.addEventListener('click', trocarPag3);
@@ -64,6 +66,14 @@ function fetchClientes() { //mexeu nessa (aqui mostra os clientes que temos no b
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchClientes();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const clienteId = urlParams.get('id');
+
+    if (clienteId) {
+        fetchClienteData(clienteId);
+        addDeleteListener(clienteId);
+    }
 });
 
 function fetchClienteData(clienteId) { //mexeu nessa 
@@ -219,4 +229,31 @@ function handleFormSubmitSeguro(event) { //inserindo novo plano de seguro ao bd
     .catch(error => {
         console.error('Erro ao enviar formulário:', error);
     });
+}
+
+function deleteCliente() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const clienteId = urlParams.get('id');
+
+    if (clienteId && confirm('Tem certeza que deseja deletar este cliente?')) {
+        fetch(`http://localhost:8080/cliente/${clienteId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) {
+                // throw new Error('Falha ao deletar cliente');
+                return response.text().then(text => { throw new Error(text) });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Cliente deletado com sucesso.');
+            // Redirecionar para outra página
+            window.location.href = "http://127.0.0.1:5500/BaseClientes.html";
+        })
+        .catch(error => {
+            console.error('Erro ao deletar cliente:', error);
+            alert('Erro ao deletar cliente.');
+        });
+    }
 }

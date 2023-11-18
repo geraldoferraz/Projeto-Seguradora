@@ -323,3 +323,19 @@ h3{
 .next-page{
     margin-left: 45%;
 }
+
+
+.delete-btn{
+    background-color: #D32F2F; /* Vermelho para a ação de deletar */
+    padding: 10px 15px;
+    color: white;
+    font-size: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-btn:hover {
+    background-color: #C1272D; /* Variação do vermelho */
+}
