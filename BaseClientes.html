@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <title>Interface de Banco de Dados</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <h1>AM Seguros</h1>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a class="homeLink" onclick="trocarPag(event)">Formulário do Cliente</a></li>
+                <li><a class="homeLink3" onclick="trocarPag3(event)">Formulário do Plano de Seguro</a></li>
+                <li><a class="homeLink2" onclick="trocarPag2(event)">Base de Clientes</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="form-search">
+            <input class="form-control" type="text" name="search" placeholder="Buscar Cliente Pelo Nome" autofocus/>
+        </div>
+        <div class="green-line"></div>
+        <form action="#" method="post">
+            <ul class="clientes-container">
+                <!-- clientes adicionados aqui -->
+            </ul>
+        </form>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

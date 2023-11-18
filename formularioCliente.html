@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface de Banco de Dados</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <h1>AM Seguros</h1>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a class="homeLink" onclick="trocarPag(event)">Home</a></li>
+                <li><a class="homeLink3" onclick="trocarPag3(event)">Formulário do Plano de Seguro</a></li>
+                <li><a class="homeLink2" onclick="trocarPag2(event)">Base de Clientes</a></li> 
+            </ul>
+        </nav>
+    </header>
+
+    <div id="error-message" class="error-message">Por favor, insira um nome válido.</div> 
+
+    <div class="container">
+        <h1>Formulário do Cliente</h1>
+        <form action="#" method="post" class="form">
+            <div class="input-group input-full">
+                <label for="Nome">Nome Completo</label>
+                <input type="text" id="Nome" name="nome" class="nome">
+            </div>
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="Tipo_Cliente">Tipo de Cliente</label>
+                    <select id="Tipo_Cliente" name="Tipo_Cliente" class="Tipo_Cliente" required>
+                        <option value="Tipo do Cliente">Escolha o tipo do Cliente</option>
+                        <option value="Pessoa Física">Pessoa Física</option>
+                        <option value="Pessoa Jurídica">Pessoa Jurídica</option>
+                    </select>
+                </div>
+                <div class="input-group input-half">
+                    <label for="Genero">Gênero</label>
+                    <select id="Genero" name="genero" required>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Feminino">Feminino</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="tipo_documento">Tipo de Documento</label>
+                    <select id="tipo_documento" name="Tipo_documento" class="tipo_documento" required>
+                        <option value="Nenhum">Escolha o Seu Documento</option>
+                        <option value="CPF">CPF</option>
+                        <option value="CNPJ">CNPJ</option>
+                    </select>
+                </div>            
+                <div class="input-group input-half">
+                    <label for="Numero_Documento">Número de Documento</label>
+                    <input type="text" id="Numero_Documento" name="Numero_Documento" class="Numero_Documento" required>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="Telefone">Telefone</label>
+                    <input type="text" id="Telefone" name="telefone" required>
+                </div>
+                <div class="input-group input-half">
+                    <label for="Email">Email</label>
+                    <input type="email" id="Email" name="email" required>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="Data_Nascimento">Data de Nascimento</label>
+                    <input type="date" id="Data_Nascimento" name="Data_Nascimento" required>
+                </div>
+                <div class="input-group input-half">
+                    <label for="CEP">CEP</label>
+                    <input type="text" id="CEP" name="cep" onchange="buscarCEP()" required>
+                </div>
+            </div>
+            <div class="input-group input-full">
+                <label for="Rua">Rua</label>
+                <input type="text" id="Rua" name="rua" required>
+            </div>
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="Bairro">Bairro</label>
+                    <input type="text" id="Bairro" name="bairro" required>
+                </div>
+                <div class="input-group input-half">
+                    <label for="Numero">Número</label>
+                    <input type="text" id="Numero" name="numero" required>
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="form-button" onclick="handleFormSubmit(event)">Inserir</button>
+            </div>
+        </form>
+    </div>
+    <script src="app.js"></script>
+    <script src="APICEP.js"></script>
+</body>
+</html>

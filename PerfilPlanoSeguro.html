@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página do Cliente - AM Seguros</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <h1>AM Seguros</h1>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a class="homeLink" onclick="trocarPag(event)">Formulário do Cliente</a></li>
+                <li><a class="homeLink3" onclick="trocarPag3(event)">Formulário do Plano de Seguro</a></li>
+                <li><a class="homeLink2" onclick="trocarPag2(event)">Base de Clientes</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Detalhes do Plano de Seguro</h1>
+        <form action="#" method="post" class="form">
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="tipo_viagem">Tipo de viagem</label>
+                    <select id="tipo_viagem" name="tipo_viagem" class="tipo_viagem" disabled>
+                        <option value="Escolha-aqui">Escolha Aqui</option>
+                        <option value="Viagem Internacional">Viagem Internacional</option>
+                        <option value="Viagem Nacional">Viagem Nacional</option>
+                    </select>
+                </div>
+                <div class="input-group input-half">
+                    <label for="tipo_cobertura">Tipo de Cobertura</label>
+                    <select id="tipo_cobertura" name="tipo_cobertura" class="tipo_cobertura" disabled>
+                        <option value="Escolha-aqui">Escolha Aqui</option>
+                        <option value="Total">Total</option>
+                        <option value="Parcial">Parcial</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="status_cliente">Status do Cliente</label>
+                    <select id="status_cliente" name="status_cliente" class="status_cliente" disabled>
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                        <option value="Pendente">Pendente</option>
+                    </select>
+                </div>
+                <div class="input-group input-half">
+                    <label for="status_pagamento">Status de Pagamento</label>
+                    <select id="status_pagamento" name="status_pagamento" class="status_pagamento" disabled>
+                        <option value="Realizado">Realizado</option>
+                        <option value="Atrasado">Atrasado</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="data_pagamento">Data de Pagamento</label>
+                    <input type="date" id="data_pagamento" name="data_pagamento" class="data_pagamento" readonly>
+                </div>
+                <div class="input-group input-half">
+                    <label for="transporte">Transporte</label>
+                    <select id="transporte" name="transporte" class="" disabled>
+                        <option value="Realizado">Aéreo</option>
+                        <option value="Atrasado">Marítimo</option>
+                        <option value="Atrasado">Rodoviário</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="data_saida">Data de saida</label>
+                    <input type="date" id="data_saida" name="data_saida" class="data_saida" readonly>
+                </div>
+                <div class="input-group input-half">
+                    <label for="data_volta">Data de Volta</label>
+                    <input type="date" id="data_volta" name="data_volta" class="data_volta" readonly>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="destino">Destino</label>
+                    <input type="text" id="destino" name="destino" readonly>
+                </div>
+                <div class="input-group input-half">
+                    <label for="fk_seguradora_cnpj">CNPJ da Seguradora</label>
+                    <input type="text" id="fk_seguradora_cnpj" name="fk_seguradora_cnpj" class="CNPJ" readonly>
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn" id="update" type="button">Atualizar</button>
+                <button class="btn delete-btn" id="delete" type="button">Deletar</button>
+                <button class="btn save-btn" id="save" type="submit" style="display: none;">Salvar</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const clienteId = urlParams.get('id');
+            if (clienteId) {
+                fetchPlanoSeguro(clienteId);
+            }
+        });
+    </script>
+    
+    <script src="Cliente.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

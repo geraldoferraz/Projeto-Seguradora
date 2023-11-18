@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface de Banco de Dados</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <h1>AM Seguros</h1>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a class="homeLink" onclick="trocarPag(event)">Formulário do Cliente</a></li>
+                <li><a class="homeLink3" onclick="trocarPag3(event)">Formulário do Plano de Seguro</a></li>
+                <li><a class="homeLink2" onclick="trocarPag2(event)">Base de Clientes</a></li> 
+            </ul>
+        </nav>
+    </header>
+
+    <div id="error-message" class="error-message">Por favor, insira um nome válido.</div> 
+
+    <div class="container">
+        <h1>Plano de Seguro</h1>
+        <form action="#" method="post" class="form2">
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="tipo_viagem">Tipo de viagem</label>
+                    <select id="tipo_viagem" name="tipo_viagem" class="tipo_viagem">
+                        <option value="Escolha-aqui">Escolha Aqui</option>
+                        <option value="Viagem Internacional">Viagem Internacional</option>
+                        <option value="Viagem Nacional">Viagem Nacional</option>
+                    </select>
+                </div>
+                <div class="input-group input-half">
+                    <label for="tipo_cobertura">Tipo de Cobertura</label>
+                    <select id="tipo_cobertura" name="tipo_cobertura" class="tipo_cobertura">
+                        <option value="Escolha-aqui">Escolha Aqui</option>
+                        <option value="Total">Total</option>
+                        <option value="Parcial">Parcial</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="status_cliente">Status do Cliente</label>
+                    <select id="status_cliente" name="status_cliente">
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                        <option value="Pendente">Pendente</option>
+                    </select>
+                </div>
+                <div class="input-group input-half">
+                    <label for="status_pagamento">Status de Pagamento</label>
+                    <select id="status_pagamento" name="status_pagamento">
+                        <option value="Realizado">Realizado</option>
+                        <option value="Atrasado">Atrasado</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="data_pagamento">Data de Pagamento</label>
+                    <input type="date" id="data_pagamento" name="data_pagamento">
+                </div>
+                <div class="input-group input-half">
+                    <label for="transporte">Transporte</label>
+                    <select id="transporte" name="transporte">
+                        <option value="Realizado">Aéreo</option>
+                        <option value="Atrasado">Marítimo</option>
+                        <option value="Atrasado">Rodoviário</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="data_saida">Data de saida</label>
+                    <input type="date" id="data_saida" name="data_saida">
+                </div>
+                <div class="input-group input-half">
+                    <label for="data_volta">Data de Volta</label>
+                    <input type="date" id="data_volta" name="data_volta">
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="input-group input-half">
+                    <label for="destino">Destino</label>
+                    <input type="text" id="destino" name="destino">
+                </div>
+                <div class="input-group input-half">
+                    <label for="fk_seguradora_cnpj">CNPJ da Seguradora</label>
+                    <input type="text" id="fk_seguradora_cnpj" name="fk_seguradora_cnpj" class="CNPJ">
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="botao" id="insert" type="submit" onclick="handleFormSubmitSeguro(event)">Inserir</button>
+            </div>
+        </form>
+    </div>
+    <script src="app.js"></script>
+    <script src="CNPJ.js"></script>
+</body>
+</html>
