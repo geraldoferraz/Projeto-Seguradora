@@ -70,7 +70,7 @@
                 <button class="btn" id="update" type="button">Atualizar</button>
                 <button class="btn delete-btn" id="delete" type="button">Deletar</button>
                 <button class="btn save-btn" id="save" type="submit" style="display: none;">Salvar</button>
-                <button class="btn next-page" id="next-page" type="button" onclick="trocarPag4(event)">Vizualizar Plano de Seguro</button>
+                <button class="btn next-page" id="next-page" type="button" onclick="trocarPag4(event)">Visualizar Plano de Seguro</button>
             </div>
         </form>
     </div>
@@ -81,6 +81,15 @@
             if (clienteId) {
                 fetchClienteData(clienteId);
             }
+
+        document.querySelector('#next-page').addEventListener('click', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const clienteId = urlParams.get('id');
+            if (clienteId) {
+                window.location.href = `PerfilPlanoSeguro.html?id=${clienteId}`;
+            }
+        });
+
         });
     </script>
     

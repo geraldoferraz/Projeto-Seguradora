@@ -64,7 +64,7 @@
                 </div>
                 <div class="input-group input-half">
                     <label for="transporte">Transporte</label>
-                    <select id="transporte" name="transporte" class="" disabled>
+                    <select id="transporte" name="transporte" class="transporte" disabled>
                         <option value="Realizado">Aéreo</option>
                         <option value="Atrasado">Marítimo</option>
                         <option value="Atrasado">Rodoviário</option>
@@ -84,7 +84,7 @@
             <div class="d-flex">
                 <div class="input-group input-half">
                     <label for="destino">Destino</label>
-                    <input type="text" id="destino" name="destino" readonly>
+                    <input type="text" id="destino" name="destino" class="destino" readonly>
                 </div>
                 <div class="input-group input-half">
                     <label for="fk_seguradora_cnpj">CNPJ da Seguradora</label>
@@ -107,6 +107,7 @@
             }
         });
     </script>
+
     
     <script src="Cliente.js"></script>
     <script src="app.js"></script>

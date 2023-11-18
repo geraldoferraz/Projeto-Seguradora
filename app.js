@@ -76,6 +76,15 @@ function fetchClienteData(clienteId) { //mexeu nessa
         .catch(error => console.error('Erro ao buscar dados do cliente:', error));
 }
 
+function fetchPlanoSeguro(clienteId) {
+    fetch(`http://localhost:8080/seguro/cliente/${clienteId}`)
+        .then(response => response.json())
+        .then(data => {
+            preencherFormularioSeguroComDados(data);
+        })
+        .catch(error => console.error('Erro ao buscar dados do plano de seguro:', error));
+}
+
 function preencherFormularioComDados(cliente) { //mexeu nessa 
     document.querySelector('.nome').value = cliente.nome;
     document.querySelector('.genero').value = cliente.genero;
@@ -85,6 +94,19 @@ function preencherFormularioComDados(cliente) { //mexeu nessa
     document.querySelector('.rua').value = cliente.rua;
     document.querySelector('.bairro').value = cliente.bairro;
     document.querySelector('.numero').value = cliente.numero;
+}
+
+function preencherFormularioSeguroComDados(plano) {
+    document.querySelector('.tipo_viagem').value = plano.tipo_viagem;
+    document.querySelector('.tipo_cobertura').value = plano.tipo_cobertura;
+    document.querySelector('.status_cliente').value = plano.status_cliente;
+    document.querySelector('.status_pagamento').value = plano.status_pagamento;
+    document.querySelector('.data_pagamento').value = plano.data_pagamento;
+    document.querySelector('.transporte').value = plano.transporte;
+    document.querySelector('.data_saida').value = plano.data_saida;
+    document.querySelector('.data_volta').value = plano.data_volta;
+    document.querySelector('.destino').value = plano.destino; 
+    document.querySelector('.CNPJ').value = plano.fk_seguradora_cnpj; 
 }
 
 function validarDocumento() { 

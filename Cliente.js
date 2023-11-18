@@ -28,8 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
 const abrirHomeLink4 = document.querySelector('.next-page');
 abrirHomeLink4.addEventListener('click', trocarPag4);
 
-function trocarPag4(event) {
-    event.preventDefault();
-    window.location.href = "http://127.0.0.1:5500/PerfilPlanoSeguro.html";
-}
+// function trocarPag4(event) {
+//     event.preventDefault();
+//     window.location.href = "http://127.0.0.1:5500/PerfilPlanoSeguro.html";
+// }
 

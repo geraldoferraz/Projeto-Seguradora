@@ -2,8 +2,15 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import mysql.connector
 import socketserver
 import json
+from datetime import date
 import urllib.parse
 import re
+
+class CustomJSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, date):
+            return o.strftime('%Y-%m-%d')
+        return json.JSONEncoder.default(self, o)
 
 def getClientes():
     connection = mysql.connector.connect(
@@ -34,6 +41,23 @@ def getClientePorId(cliente_id):
     connection.close()
     return cliente
 
+
+def getPlanoSeguroPorClienteId(cliente_id):
+    connection = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='',
+        database="corretorabd"
+    )
+    cursor = connection.cursor(dictionary=True)
+    query = "SELECT * FROM PlanoSeguro WHERE fk_cliente_id = %s"
+    cursor.execute(query, (cliente_id,))
+    plano = cursor.fetchone()
+    cursor.close()
+    connection.close()
+    return plano
+
+
 class Requisicoes(BaseHTTPRequestHandler):
 
     def _set_headers(self, status_code):
@@ -51,16 +75,27 @@ class Requisicoes(BaseHTTPRequestHandler):
 
     def do_GET(self): 
         cliente_match = re.match(r"/cliente/(\d+)", self.path)
-        print(cliente_match)
+        seguro_match = re.match(r"/seguro/cliente/(\d+)", self.path)
+
         if cliente_match:
             cliente_id = cliente_match.group(1)
             self._set_headers(200)
             cliente = getClientePorId(cliente_id)
             self.wfile.write(json.dumps(cliente).encode())
+
+        elif seguro_match:
+            cliente_id = seguro_match.group(1)
+            self._set_headers(200)
+            plano = getPlanoSeguroPorClienteId(cliente_id)
+            self.wfile.write(json.dumps(plano, cls=CustomJSONEncoder).encode())
+
+
         elif self.path == '/clientes':
             self._set_headers(200)
-            cliente = getClientes()
-            self.wfile.write(json.dumps(cliente).encode())
+            clientes = getClientes()
+            self.wfile.write(json.dumps(clientes).encode())
+ 
+
  
     def do_POST(self):
         if self.path == '/novoCliente':
