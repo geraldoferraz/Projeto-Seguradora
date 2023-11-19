@@ -3,7 +3,7 @@ document.querySelector('.tipo_cobertura').addEventListener('change', atualizaCNP
 
 function atualizaCNPJ() {
     const tipo_Cobertura = document.querySelector('.tipo_cobertura').value;
-    const CNPJ = document.querySelector('.CNPJ');
+    const CNPJ = document.querySelector('.fk_seguradora_cnpj');
     const errorMessageElement = document.querySelector('.error-message');
 
     if (tipo_Cobertura === 'Total') {

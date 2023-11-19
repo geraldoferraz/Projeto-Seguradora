@@ -41,7 +41,6 @@ def getClientePorId(cliente_id):
     connection.close()
     return cliente
 
-
 def getPlanoSeguroPorClienteId(cliente_id):
     connection = mysql.connector.connect(
         host='localhost',
@@ -57,7 +56,66 @@ def getPlanoSeguroPorClienteId(cliente_id):
     connection.close()
     return plano
 
+def updateCliente(cliente_id, data):
+    connection = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='',
+        database="corretorabd"
+    )
+    cursor = connection.cursor()
+    update_query = """
+    UPDATE Cliente SET nome = %s, telefone = %s, email = %s, genero = %s, cep = %s, rua = %s, bairro = %s, numero = %s WHERE id = %s
+    """
+    cursor.execute(update_query, (data['nome'], data['telefone'], data['email'], data['genero'], data['cep'], data['rua'], data['bairro'], data['numero'], cliente_id))
+    connection.commit()
+    cursor.close()
+    connection.close()
 
+def updatePlanoSeguro(cliente_id, data):
+    connection = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='',
+        database="corretorabd"
+    )
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM PlanoSeguro WHERE fk_cliente_id = %s", (cliente_id,))
+    if cursor.fetchone() is None:
+        print(f"Plano de seguro para o cliente com ID {cliente_id} não encontrado.")
+        return False 
+
+    try:
+        if not all(key in data for key in ['tipo_viagem', 'tipo_cobertura', 'status_cliente', 'status_pagamento', 'data_pagamento', 'transporte', 'data_saida', 'data_volta', 'destino', 'fk_seguradora_cnpj']):
+            print("Dados incompletos para atualizar o plano de seguro.")
+            return False
+
+        update_query = """
+        UPDATE PlanoSeguro SET
+        tipo_viagem = %s, tipo_cobertura = %s, status_cliente = %s,
+        status_pagamento = %s, data_pagamento = %s, transporte = %s, data_saida = %s,
+        data_volta = %s, destino = %s, fk_seguradora_cnpj = %s
+        WHERE fk_cliente_id = %s
+        """
+        cursor.execute(update_query, (
+            data['tipo_viagem'], data['tipo_cobertura'], data['status_cliente'],
+            data['status_pagamento'], data['data_pagamento'], data['transporte'], data['data_saida'],
+            data['data_volta'], data['destino'], data['fk_seguradora_cnpj'],
+            cliente_id 
+        ))
+        connection.commit()
+        return True
+    except mysql.connector.Error as err: 
+        print(f"Erro ao atualizar plano de seguro: {err}")
+        connection.rollback()
+        return False
+    finally:
+        cursor.close()
+        connection.close()
+
+
+  
 def deleteCliente(cliente_id):
     connection = mysql.connector.connect(
         host='localhost',
@@ -89,7 +147,6 @@ def deleteCliente(cliente_id):
     finally:
         cursor.close()
         connection.close()
-
 
 def deletePlanoSeguro(plano_seguro_id):
     connection = mysql.connector.connect(
@@ -127,8 +184,9 @@ class Requisicoes(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
         self.end_headers()
+
 
     def do_OPTIONS(self): 
         self._set_headers(200)
@@ -154,15 +212,15 @@ class Requisicoes(BaseHTTPRequestHandler):
             self._set_headers(200)
             clientes = getClientes()
             self.wfile.write(json.dumps(clientes).encode())
- 
+       
 
  
-    def do_POST(self):
+    def do_POST(self):    
         if self.path == '/novoCliente':
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
             data = json.loads(post_data)
-            connection = mysql.connector.connect(
+            connection = mysql.connector.connect( 
                 host='localhost',
                 user='root',
                 password='',
@@ -217,6 +275,31 @@ class Requisicoes(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({'status': 'sucesso'}).encode())
 
 
+    def do_PUT(self):
+        cliente_match = re.match(r"/cliente/(\d+)", self.path)
+        plano_seguro_match = re.match(r"/planoSeguro/(\d+)", self.path)
+
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length)
+        data = json.loads(post_data)
+
+        if cliente_match:
+            cliente_id = int(cliente_match.group(1))
+            updateCliente(cliente_id, data)
+            self._set_headers()
+            self.wfile.write(json.dumps({'status': 'sucesso'}).encode())
+
+        elif plano_seguro_match:
+            plano_seguro_id = int(plano_seguro_match.group(1))
+            updatePlanoSeguro(plano_seguro_id, data)
+            self._set_headers()
+            self.wfile.write(json.dumps({'status': 'sucesso'}).encode())
+        else:
+            self._set_headers(404)
+            self.wfile.write(json.dumps({'status': 'falha', 'erro': 'Rota não encontrada'}).encode())
+
+
+
     def do_DELETE(self):
         cliente_match = re.match(r"/cliente/(\d+)", self.path)
         plano_seguro_match = re.match(r"/planoSeguro/(\d+)", self.path)
@@ -254,23 +337,3 @@ def run(server_class=HTTPServer, port=8080):
 
 if __name__ == "__main__":
     run()
-
-       
-
-
- 
-
-
-
- 
- 
-
-
-
-
-
-
-
-
-
-

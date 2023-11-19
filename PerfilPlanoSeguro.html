@@ -88,13 +88,13 @@
                 </div>
                 <div class="input-group input-half">
                     <label for="fk_seguradora_cnpj">CNPJ da Seguradora</label>
-                    <input type="text" id="fk_seguradora_cnpj" name="fk_seguradora_cnpj" class="CNPJ" readonly>
+                    <input type="text" id="fk_seguradora_cnpj" name="fk_seguradora_cnpj" class="fk_seguradora_cnpj" readonly>
                 </div>
             </div>
             <div class="buttons">
                 <button class="btn" id="update" type="button">Atualizar</button> 
                 <button class="btn delete-btn" id="delete" type="button" onclick="deletePlanoSeguro()">Deletar</button>
-                <button class="btn save-btn" id="save" type="submit" style="display: none;">Salvar</button>
+                <button class="btn save-btn" id="save" type="submit" style="display: none;" onclick="atualizarPlanoSeguro()">Salvar</button>
             </div>
         </form>
     </div>
@@ -107,9 +107,8 @@
             }
         });
     </script>
-
-    
     <script src="Cliente.js"></script>
     <script src="app.js"></script>
+    <script src="CNPJ.js"></script>
 </body>
 </html>

@@ -116,7 +116,7 @@ function preencherFormularioSeguroComDados(plano) {
     document.querySelector('.data_saida').value = plano.data_saida;
     document.querySelector('.data_volta').value = plano.data_volta;
     document.querySelector('.destino').value = plano.destino; 
-    document.querySelector('.CNPJ').value = plano.fk_seguradora_cnpj; 
+    document.querySelector('.fk_seguradora_cnpj').value = plano.fk_seguradora_cnpj; 
 }
 
 function validarDocumento() { 
@@ -281,4 +281,92 @@ function deletePlanoSeguro() {
             alert('Erro ao deletar plano de seguro.');
         });
     }
+}
+
+function atualizarCliente() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const clienteId = urlParams.get('id');
+
+    if (!clienteId) {
+        console.error('Cliente ID não encontrado.');
+        return;
+    }
+
+    const data = {
+        nome: document.querySelector('.nome').value,
+        telefone: document.querySelector('.telefone').value, 
+        email: document.querySelector('.email').value,
+        genero: document.querySelector('.genero').value,
+        cep: document.querySelector('.cep').value,
+        rua: document.querySelector('.rua').value,
+        bairro: document.querySelector('.bairro').value,
+        numero: document.querySelector('.numero').value
+    };
+
+    fetch(`http://localhost:8080/cliente/${clienteId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Falha na atualização do cliente');
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert('Cliente atualizado com sucesso.');
+        window.location.reload();
+    })
+    .catch(error => {
+        console.error('Erro na atualização do cliente:', error);
+        alert('Erro ao atualizar o cliente.');
+    });
+}
+
+function atualizarPlanoSeguro() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const clienteId = urlParams.get('id');
+
+    if (!clienteId) {
+        console.error('Plano de Seguro ID não encontrado.');
+        return;
+    }
+
+    const data = {
+        tipo_viagem: document.querySelector('.tipo_viagem').value,
+        tipo_cobertura: document.querySelector('.tipo_cobertura').value,
+        status_cliente: document.querySelector('.status_cliente').value,
+        status_pagamento: document.querySelector('.status_pagamento').value,
+        data_pagamento: document.querySelector('.data_pagamento').value,
+        transporte: document.querySelector('.transporte').value,
+        data_saida: document.querySelector('.data_saida').value,
+        data_volta: document.querySelector('.data_volta').value,
+        destino: document.querySelector('.destino').value, 
+        fk_seguradora_cnpj: document.querySelector('.fk_seguradora_cnpj').value
+    };
+    console.log(data); 
+    fetch(`http://localhost:8080/planoSeguro/${clienteId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Falha na atualização do plano de seguro');
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert('Plano de seguro atualizado com sucesso.');
+        window.location.reload();
+    })
+    .catch(error => {
+        console.error('Erro na atualização do plano de seguro:', error);
+        alert('Erro ao atualizar o plano de seguro.');
+    });
 }
