@@ -95,6 +95,7 @@
                 <button class="btn" id="update" type="button">Atualizar</button> 
                 <button class="btn delete-btn" id="delete" type="button" onclick="deletePlanoSeguro()">Deletar</button>
                 <button class="btn save-btn" id="save" type="submit" style="display: none;" onclick="atualizarPlanoSeguro()">Salvar</button>
+                <button class="btn next-page" id="next-page-cliente" type="button" onclick="trocarPag4(event)">Visualizar Dados do Cliente</button>
             </div>
         </form>
     </div>
@@ -105,6 +106,14 @@
             if (clienteId) {
                 fetchPlanoSeguro(clienteId);
             }
+        
+        document.querySelector('#next-page-cliente').addEventListener('click', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const clienteId = urlParams.get('id');
+            if (clienteId) {
+                window.location.href = `PerfilCliente.html?id=${clienteId}`;
+            }
+        });
         });
     </script>
     <script src="Cliente.js"></script>

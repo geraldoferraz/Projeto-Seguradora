@@ -281,12 +281,12 @@ class Requisicoes(BaseHTTPRequestHandler):
 
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
-        data = json.loads(post_data)
+        data = json.loads(post_data)       
 
-        if cliente_match:
+        if cliente_match:    
             cliente_id = int(cliente_match.group(1))
             updateCliente(cliente_id, data)
-            self._set_headers()
+            self._set_headers()  
             self.wfile.write(json.dumps({'status': 'sucesso'}).encode())
 
         elif plano_seguro_match:
