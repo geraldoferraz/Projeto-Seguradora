@@ -12,7 +12,7 @@ class CustomJSONEncoder(json.JSONEncoder):
             return o.strftime('%Y-%m-%d')
         return json.JSONEncoder.default(self, o)
 
-def getClientes():
+def getClientes(filtroGenero=None, filtroStatusCliente=None, filtroStatusPagamento=None, filtroIdade=None):
     connection = mysql.connector.connect(
         host='localhost',
         user='root',
@@ -20,7 +20,27 @@ def getClientes():
         database="corretorabd"
     )
     cursor = connection.cursor(dictionary=True)
-    cursor.execute('SELECT * FROM Cliente')
+    query = """
+    SELECT Cliente.* FROM Cliente
+    JOIN PlanoSeguro ON Cliente.ID = PlanoSeguro.fk_cliente_id
+    """
+    params = []
+
+    where_clauses = []
+    if filtroGenero:
+        where_clauses.append('Cliente.genero = %s')
+        params.append(filtroGenero)
+    if filtroStatusCliente:   
+        where_clauses.append('PlanoSeguro.status_cliente = %s')
+        params.append(filtroStatusCliente)
+    if filtroStatusPagamento:
+        where_clauses.append('PlanoSeguro.status_pagamento = %s')
+        params.append(filtroStatusPagamento)
+
+    if where_clauses:
+        query += ' WHERE ' + ' AND '.join(where_clauses)
+        
+    cursor.execute(query, tuple(params)) 
     users = cursor.fetchall()
     cursor.close()
     connection.close()
@@ -114,8 +134,6 @@ def updatePlanoSeguro(cliente_id, data):
         cursor.close()
         connection.close()
 
-
-  
 def deleteCliente(cliente_id):
     connection = mysql.connector.connect(
         host='localhost',
@@ -187,7 +205,6 @@ class Requisicoes(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
         self.end_headers()
 
-
     def do_OPTIONS(self): 
         self._set_headers(200)
 
@@ -206,15 +223,25 @@ class Requisicoes(BaseHTTPRequestHandler):
             self._set_headers(200)
             plano = getPlanoSeguroPorClienteId(cliente_id)
             self.wfile.write(json.dumps(plano, cls=CustomJSONEncoder).encode())
+        
+        elif self.path.startswith('/clientes'):
+            parsed_path = urllib.parse.urlparse(self.path)
+            query_params = urllib.parse.parse_qs(parsed_path.query)
 
+            filtroGenero = query_params.get('filtroGenero', [None])[0]
+            filtroStatusCliente = query_params.get('filtroStatusCliente', [None])[0]
+            filtroStatusPagamento = query_params.get('filtroStatusPagamento', [None])[0]
 
+            clientes = getClientes(filtroGenero, filtroStatusCliente, filtroStatusPagamento)
+            self._set_headers()
+            self.wfile.write(json.dumps(clientes, cls=CustomJSONEncoder).encode())
+
+              
         elif self.path == '/clientes':
             self._set_headers(200)
             clientes = getClientes()
             self.wfile.write(json.dumps(clientes).encode())
        
-
- 
     def do_POST(self):    
         if self.path == '/novoCliente':
             content_length = int(self.headers['Content-Length'])
@@ -274,7 +301,6 @@ class Requisicoes(BaseHTTPRequestHandler):
             self._set_headers(200)
             self.wfile.write(json.dumps({'status': 'sucesso'}).encode())
 
-
     def do_PUT(self):
         cliente_match = re.match(r"/cliente/(\d+)", self.path)
         plano_seguro_match = re.match(r"/planoSeguro/(\d+)", self.path)
@@ -297,8 +323,6 @@ class Requisicoes(BaseHTTPRequestHandler):
         else:
             self._set_headers(404)
             self.wfile.write(json.dumps({'status': 'falha', 'erro': 'Rota não encontrada'}).encode())
-
-
 
     def do_DELETE(self):
         cliente_match = re.match(r"/cliente/(\d+)", self.path)

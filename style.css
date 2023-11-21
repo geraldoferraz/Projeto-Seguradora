@@ -38,7 +38,7 @@ option {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 50px;
+    padding: 10px 3%; /* Ajuste para espaçamento responsivo */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -339,3 +339,89 @@ h3{
 .delete-btn:hover {
     background-color: #C1272D; /* Variação do vermelho */
 }
+
+.sidebar {
+    height: 100%;
+    width: 0; /* Sidebar inicialmente fechada */
+    transition: width 1s ease;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111; /* Exemplo de cor de fundo */
+    overflow-x: hidden; /* Oculta o conteúdo fora da largura da sidebar */
+    transition: 1s; /* Efeito de transição */
+    padding-top: 60px;
+    cursor: pointer;
+}
+
+.sidebar.open {
+    width: 17%;
+}
+
+.sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+.sidebar h3 {
+    color: white;
+    margin-left: 5%;
+}
+
+.filtro {
+    margin-bottom: 15px;
+    padding: 8px;
+}
+
+.filtro label {
+    margin-left: 5%;
+    color: white;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.filtro select {
+    border: 1.5px solid white;
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border-radius: 20px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: url('data:image/svg+xml;utf8,<svg fill="%234CAF50" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat 95% center;
+}
+
+.filtro select:focus{
+    border-color: #4CAF50;
+    outline: none;
+}
+
+
+.button {
+    background-color: #4CAF50; 
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    margin-left: 35%;
+    cursor: pointer;
+} 
+
+.button:hover {
+    background-color: #45a049;
+}
+
+
+
+

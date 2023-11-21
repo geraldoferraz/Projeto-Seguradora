@@ -1,0 +1,65 @@
+.header-controls {
+    display: flex;
+    align-items: center; /* Alinhamento vertical dos itens */
+    gap: 15px; /* Espaçamento entre os elementos */
+}
+
+.dropbtn{
+    height: 42px; /* Altura consistente para os botões */
+    border: none;
+    border-radius: 10px;
+    font-size: 17px;
+    cursor: pointer;
+    background-color: #4CAF50; /* Cor de fundo do botão */
+    color: white; /* Cor do texto */
+    transition: background-color 0.3s; /* Transição suave ao passar o mouse */
+    background: url('data:image/svg+xml;utf8,<svg fill="%23333" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat 95% center;
+    width: 170px; /* Largura aumentada do botão de menu */
+    margin-right: 10%; /* Reduz a margem direita para mover o botão para a esquerda */
+    padding: 10px 15px; /* Ajuste de padding para consistência */
+}
+
+.dropdown {
+    border-radius: 10px;
+    position: relative;
+}
+
+.dropdown-content {
+    background-color: #333;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    position: absolute;
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    visibility: hidden;
+    overflow: hidden; /* Esconde o conteúdo que excede o tamanho */
+    width: 100%;
+}
+
+
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Espaça o texto e o ícone */
+    cursor: pointer;
+}
+
+.dropdown-content a:hover {
+    background-color: #4CAF50;
+}
+
+.dropdown:hover .dropdown-content {
+    opacity: 1;
+    transform: scaleY(1);
+    visibility: visible;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}

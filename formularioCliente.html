@@ -5,19 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interface de Banco de Dados</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Dropdown.css">
 </head>
 <body>
     <header class="main-header">
         <div class="logo">
             <h1>AM Seguros</h1>
         </div>
-        <nav class="main-nav">
-            <ul>
-                <li><a class="homeLink" onclick="trocarPag(event)">Home</a></li>
-                <li><a class="homeLink3" onclick="trocarPag3(event)">Formulário do Plano de Seguro</a></li>
-                <li><a class="homeLink2" onclick="trocarPag2(event)">Base de Clientes</a></li> 
-            </ul>
-        </nav>
+        <div class="header-controls">
+            <div class="dropdown">
+                <button class="dropbtn">Menu</button>
+                <div class="dropdown-content">
+                    <a href="#" class="homeLink" onclick="trocarPag(event)">Clientes</a>
+                    <a href="#" class="homeLink3" onclick="trocarPag3(event)">Plano de Seguro</a>
+                    <a href="#" class="homeLink2" onclick="trocarPag2(event)">Base Clientes</a>
+                </div>
+            </div>
     </header>
 
     <div id="error-message" class="error-message">Por favor, insira um nome válido.</div> 
@@ -64,7 +67,7 @@
             <div class="d-flex">
                 <div class="input-group input-half">
                     <label for="Telefone">Telefone</label>
-                    <input type="text" id="Telefone" name="telefone" required>
+                    <input type="text" id="Telefone" name="telefone">
                 </div>
                 <div class="input-group input-half">
                     <label for="Email">Email</label>

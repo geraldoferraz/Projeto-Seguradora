@@ -1,8 +1,8 @@
 const abrirHomeLink = document.querySelector('.homeLink');
 const abrirHomeLink2 = document.querySelector('.homeLink2');
 const abrirHomeLink3 = document.querySelector('.homeLink3');
-const search = document.querySelector('.form-control');
-const ul = document.querySelector('.clientes-container');
+const search = document.getElementById('search');
+const ul = document.getElementById('clientesList');
 
 
 
@@ -25,6 +25,12 @@ function trocarPag3(event) {
     window.location.href = "http://127.0.0.1:5500/formularioApolice.html";
 }
 
+function toggleFiltro(event) {
+    event.preventDefault();
+    var sidebar = document.getElementById("mySidebar");
+    sidebar.classList.toggle("open");
+}
+
 search.addEventListener('input', event => {
     const inputValue = event.target.value.trim().toLowerCase();
 
@@ -43,26 +49,64 @@ search.addEventListener('input', event => {
         });
 });
 
-function fetchClientes() { //mexeu nessa (aqui mostra os clientes que temos no banco de dados)
+
+function fetchClientes() {
     fetch('http://localhost:8080/clientes')
         .then(response => response.json())
-        .then(data => {
-            data.forEach(cliente => {
-                const li = document.createElement('li');
-                li.className = "list-clientes clickable";
-                const span = document.createElement('span');
-                span.textContent = cliente.nome;
-                li.appendChild(span);
-                ul.appendChild(li);
-                console.log(cliente.ID);
-
-                li.addEventListener('click', () => { //adicionou isso 
-                    window.location.href = `PerfilCliente.html?id=${cliente.ID}`;
-                });
-            });
+        .then(clientes => {
+            atualizarListaClientes(clientes);
         })
         .catch(error => console.error('Erro ao buscar clientes:', error));
 }
+
+function fetchClientesComFiltro() {
+    const filtroGenero = document.querySelector('#filtroGenero').value;
+    const filtroStatusCliente = document.querySelector('#filtroStatusCliente').value;
+    const filtroStatusPagamento = document.querySelector('#filtroStatusPagamento').value;
+
+    let query = [];
+    if (filtroGenero) {
+        query.push(`filtroGenero=${encodeURIComponent(filtroGenero)}`);
+    }
+    if (filtroStatusCliente) {
+        query.push(`filtroStatusCliente=${encodeURIComponent(filtroStatusCliente)}`);
+    }
+    if (filtroStatusPagamento) {
+        query.push(`filtroStatusPagamento=${encodeURIComponent(filtroStatusPagamento)}`);
+    }
+    query = query.join('&');
+
+    fetch(`http://localhost:8080/clientes?${query}`)
+        .then(response => response.json())
+        .then(clientes => {
+            atualizarListaClientes(clientes);
+        })
+        .catch(error => console.error('Erro ao buscar clientes:', error));
+}
+
+
+function atualizarListaClientes(clientes) {
+    const listaClientes = document.querySelector('.clientes-container');
+    listaClientes.innerHTML = '';
+
+    clientes.forEach(cliente => {
+        const li = document.createElement('li');
+        li.className = "list-clientes clickable";
+        const span = document.createElement('span');
+        span.textContent = cliente.nome;
+        li.appendChild(span);
+
+        li.addEventListener('click', () => {
+            window.location.href = `PerfilCliente.html?id=${cliente.ID}`;
+        });
+
+        listaClientes.appendChild(li);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchClientesComFiltro(); 
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchClientes();

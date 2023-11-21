@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <title>Interface de Banco de Dados</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Dropdown.css">
 </head>
 
 <body>
@@ -14,22 +15,58 @@
         <div class="logo">
             <h1>AM Seguros</h1>
         </div>
-        <nav class="main-nav">
-            <ul>
-                <li><a class="homeLink" onclick="trocarPag(event)">Formulário do Cliente</a></li>
-                <li><a class="homeLink3" onclick="trocarPag3(event)">Formulário do Plano de Seguro</a></li>
-                <li><a class="homeLink2" onclick="trocarPag2(event)">Base de Clientes</a></li>
-            </ul>
-        </nav>
+        <div class="header-controls">
+            <div class="dropdown">
+                <button class="dropbtn">Menu</button>
+                <div class="dropdown-content">
+                    <a href="#" class="homeLink" onclick="trocarPag(event)">Clientes</a>
+                    <a href="#" class="homeLink3" onclick="trocarPag3(event)">Plano de Seguro</a>
+                    <a href="#" class="homeLink2" onclick="trocarPag2(event)">Base Clientes</a>
+                    <a id="sidebarToggle" class="sidebarToggle" onclick="toggleFiltro(event)">Filtro</a>
+                </div>
+            </div>
+        </div>
     </header>
+
+    <div class="sidebar" id="mySidebar">
+        <h3>Filtros</h3>
+        <div class="filtro">
+            <label for="filtroGenero">Gênero</label>
+            <select id="filtroGenero" class="form-control">
+                <option value="">Todos</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+            </select>
+        </div>
+
+        <div class="filtro">
+            <label for="filtroStatusCliente">Status do Cliente</label>
+            <select id="filtroStatusCliente" class="form-control">
+                <option value="">Todos</option>
+                <option value="Ativo">Ativo</option>
+                <option value="Inativo">Inativo</option>
+            </select>
+        </div>
+
+        <div class="filtro">
+            <label for="filtroStatusPagamento">Status de Pagamento</label>
+            <select id="filtroStatusPagamento" class="form-control">
+                <option value="">Todos</option>
+                <option value="Realizado">Realizado</option>
+                <option value="Atrasado">Atrasado</option>
+            </select>
+        </div> 
+
+        <button onclick="fetchClientesComFiltro()" class="button">Buscar</button>
+    </div>
 
     <div class="container">
         <div class="form-search">
-            <input class="form-control" type="text" name="search" placeholder="Buscar Cliente Pelo Nome" autofocus/>
+            <input id="search" class="form-control" type="text" name="search" placeholder="Buscar Cliente Pelo Nome" autofocus/>
         </div>
         <div class="green-line"></div>
         <form action="#" method="post">
-            <ul class="clientes-container">
+            <ul class="clientes-container" id="clientesList">
                 <!-- clientes adicionados aqui -->
             </ul>
         </form>
